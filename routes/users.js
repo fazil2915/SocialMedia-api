@@ -3,7 +3,7 @@ const router=require("express").Router();
 const bcrypt=require("bcrypt");     
 
 //update user 
-//delete a user
+
 //follow a user
 //unfollow a user
 
@@ -29,4 +29,18 @@ if(req.body.userId===req.params.id||req.user.isAdmin){
     return res.status(403).json("The account not yours");
 }
 })
+//delete a user
+router.delete("/:id",async(req,res)=>{
+    if(req.body.userId===req.params.id||req.body.isAdmin){
+        
+        try{
+            const user=await User.findByIdAndDelete(req.params.id);
+            res.status(200).json("Account has been deleted");
+        }catch(err){
+            return res.status(500).json(err);
+        }
+    }else{
+        return res.status(403).json("The account not yours");
+    }
+    })
 module.exports=router
